@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Policies;
+use App\Leaves;
 
 class PoliciesController extends Controller
 {
@@ -12,7 +13,24 @@ class PoliciesController extends Controller
         $policies = new Policies;
         $results = $policies::all();
         // echo $results;
-        $results_json = json_encode($results);
+        // $results_json = json_encode($results);
+        $results_json = $results;
+        return response()
+                ->json($results_json)
+                ->header('Content-Type', 'application/json');
+    }
+    public function getAllLeaves($id) {
+        if($id == null) {
+            return "please pass parameter id in the request";
+        }
+        $leaves = new Leaves;
+        $results = $leaves::where('policy_id', $id)->get();
+        // var_dump($results);
+        // foreach($results as $result) {
+        //     echo $result;
+        // }
+        // $results_json = json_encode($results);
+        $results_json=$results;
         return response()
                 ->json($results_json)
                 ->header('Content-Type', 'application/json');
@@ -39,7 +57,6 @@ class PoliciesController extends Controller
         $policies = new Policies;
         $policies->name = $name;
         $policies->save();
-
         return response()->json([
             'name' => $policies->name
         ]);
