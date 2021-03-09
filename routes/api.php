@@ -30,3 +30,20 @@ Route::get("/leaves/{id}", "LeavesController@findOne");
 Route::post("/leaves", "LeavesController@createOne");
 Route::put("/leaves/{id}", "LeavesController@updateOne");
 Route::delete("/leaves/{id}", "LeavesController@deleteOne");
+
+//TODO:
+// attendence sheet should contain a save button for each user component 
+// so that only one user attendance update shouldn't require updateing all the rows of 
+// the databse
+// Route::get("/attendances/{year}/{month}/{day}/{user_id}") -> get one user information 
+// Route::post("/attendances/{year}/{month}/{day}/{user_id}") -> post one user information 
+// Route::put("/attendances/{year}/{month}/{day}/{user_id}") -> update one user information 
+// Route::get("/attendances/${date}", "");
+Route::post("/attendances", "AttendancesController@createOne");
+Route::put("/attendances", "AttendancesController@updateOne");
+// Route::get("/attendances/${date}/${user_id}", "");
+
+Route::get("/reasons", "ReasonController@getAll");
+Route::post("/reasons", "ReasonController@createOne");
+Route::put("/reasons/{id?}", "ReasonController@updateOne");
+Route::delete("/reasons/{id?}", "ReasonController@deleteOne");
