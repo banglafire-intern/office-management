@@ -54,3 +54,8 @@ Route::post("/remainings/{user_id?}/{leave_id?}", "RemainingsController@createOn
 Route::put("/remainings/{user_id?}/{leave_id?}", "RemainingsController@updateOne");
 // Route::posts("/remainings/{id}", "");
 // Route::put("/remainings/{id}", "");
+
+Route::post("/leave-requests", "LeaveRequestController@createOne");
+Route::get("/leave-requests", "LeaveRequestController@fetchAll");
+Route::get("/leave-requests/{user_id?}", "LeaveRequestController@fetchForOneUser");
+Route::put("/leave-requests/{request_id?}", "LeaveRequestController@editOneRequest");

@@ -21,6 +21,8 @@ class CreateLeaveRequests extends Migration
             $table->date('start_date');
             $table->date('end_date');
             $table->string('approve_status');
+            $table->timestamp('created_at')->nullable();
+            $table->timestamp('updated_at')->nullable();
         });
     }
 
