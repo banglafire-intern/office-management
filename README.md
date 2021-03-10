@@ -32,3 +32,9 @@ docker-compose up
 ## Create Controllers
 
 -   `php artisan make:controller PoliciesController`
+
+## Database Query
+
+-   **Why User & Remaining table are separate?**
+    one user has many leaves & days. If we store remainings in the users table then there will be
+    redundency in user data.

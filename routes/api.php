@@ -47,3 +47,10 @@ Route::get("/reasons", "ReasonController@getAll");
 Route::post("/reasons", "ReasonController@createOne");
 Route::put("/reasons/{id?}", "ReasonController@updateOne");
 Route::delete("/reasons/{id?}", "ReasonController@deleteOne");
+
+
+Route::get("/remainings/{user_id?}/{leave_id?}", "RemainingsController@getOne");
+Route::post("/remainings/{user_id?}/{leave_id?}", "RemainingsController@createOne");
+Route::put("/remainings/{user_id?}/{leave_id?}", "RemainingsController@updateOne");
+// Route::posts("/remainings/{id}", "");
+// Route::put("/remainings/{id}", "");
