@@ -17,8 +17,17 @@ class CreateUsersTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
+            $table->string('mac_address')->nullable();
+            $table->string('used_device')->nullable();
+            $table->string('salary')->default('0');
+            $table->date('joining_date')->nullable();
+            $table->string('designation')->nullable();
+            $table->string('mobile_no')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+
+            $table->unsignedBigInteger('policy_id')->nullable();
+
             $table->rememberToken();
             $table->timestamps();
         });

@@ -16,12 +16,13 @@ class CreateLeaves extends Migration
         Schema::create('leaves', function (Blueprint $table) {
             $table->id('leave_id')->autoIncrement();
             $table->string('name');
-            $table->string('type');
+            $table->string('payment_type');
             $table->integer('days');
             $table->unsignedBigInteger('policy_id');
             $table->foreign('policy_id')
                     ->references('policy_id')
-                    ->on('policies');
+                    ->on('policies')
+                    ->onDelete('cascade');
         });
     }
 

@@ -14,16 +14,17 @@ class CreateAttendances extends Migration
     public function up()
     {
         Schema::create('attendances', function (Blueprint $table) {
-            $table->id('id')->autoIncrement();
+            $table->id();
             $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')
+                    ->references('id')
+                    ->on('users')
+                    ->onDelete('cascade');
+
             $table->date('date');
-            $table->boolean('status');
+            $table->boolean('status')->default(0);
             $table->timestamp('start_time', 0)->nullable();
             $table->timestamp('end_time', 0)->nullable();
-            $table->unsignedBigInteger('reason_id')->nullable();
-            $table->foreign('reason_id')
-                    ->references('reason_id')
-                    ->on('reasons');
         });
     }
 
