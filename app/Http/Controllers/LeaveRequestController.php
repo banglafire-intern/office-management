@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\LeaveRequests;
+use App\Remainings;
+use DateTime;
 
 class LeaveRequestController extends Controller
 {
@@ -43,6 +45,29 @@ class LeaveRequestController extends Controller
         $requests = LeaveRequests::where('user_id', $user_id)->get();
         return response()->json($requests)->header('Content-Type', 'application/json');
     }
+
+    private function updateRemainigs($user_id = null, $leave_id = null, $days) {
+        if($user_id == null || $leave_id == null) {
+            return "please pass user_id & leave_id as parameter";
+        } 
+        $remainings = new Remainings;
+        $remaining = $remainings::
+            where('user_id', '=', $user_id)
+            ->where('leave_id', '=', $leave_id)
+            ->first();
+       if($remaining) {
+           if($remaining->days >= $days) {
+            $remaining->days = $remaining->days - $days;
+           } else {
+            $remaining->days = 0;
+           }
+            $remaining->save();
+            return $remaining->getOriginal();
+       } else {
+            // return response("user id and leave id not found", 404);
+            return "user_id & leave_id not found";
+       } 
+    }
     public function editOneRequest(Request $request, $request_id = null) {
         if($request_id == null) {
             return "please pass request_id as parameter";
@@ -54,9 +79,19 @@ class LeaveRequestController extends Controller
             ]);
             $leaveRequest->approve_status = $data['approve_status'];
             $leaveRequest->save();
+            if($leaveRequest->approve_status == "accepted") {
+                $day1 = new DateTime($leaveRequest->start_date);
+                $day2 = new DateTime($leaveRequest->end_date);
+                $diff = $day1->diff($day2);
+                $interval = intval($diff->format('%a'), 10);
+                echo $interval;
+                $response = $this->updateRemainigs($leaveRequest->user_id, $leaveRequest->leave_id, $interval);
+                return $response;
+            }
             return $leaveRequest->getOriginal();
         } else {
             return response("leave_request id not found", 404);
         }
     }
+
 }
