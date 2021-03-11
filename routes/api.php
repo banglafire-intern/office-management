@@ -20,6 +20,14 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+
+Route::get("/user/early-bird", "UserHomeController@earlyBird");
+Route::get("/user/sticky-glue", "UserHomeController@stickyGlue");
+Route::get("/user/missed-by-inch", "UserHomeController@missedByAnInch");
+
+Route::get("/user-policies", "UserPolicyController@getAllUserPolicies");
+Route::put("/user-policies/{user_id?}", "UserPolicyController@updateOneUserPolicy");
+
 Route::get("/policies","PoliciesController@getAll");
 Route::get("/policies/{id}", "PoliciesController@getAllLeaves");
 Route::post("/policies", "PoliciesController@createOne");
