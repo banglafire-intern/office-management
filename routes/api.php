@@ -30,6 +30,7 @@ Route::put("/user-policies/{user_id?}", "UserPolicyController@updateOneUserPolic
 
 Route::get("/policies","PoliciesController@getAll");
 Route::get("/policies/{id}", "PoliciesController@getAllLeaves");
+Route::get("/policies/name/{id?}", "PoliciesController@getOnePolicy");
 Route::post("/policies", "PoliciesController@createOne");
 Route::put("/policies/{id}", "PoliciesController@updateOne");
 Route::delete("/policies/{id}", "PoliciesController@deleteOne");

@@ -19,6 +19,24 @@ class PoliciesController extends Controller
                 ->json($results_json)
                 ->header('Content-Type', 'application/json');
     }
+    public function getOnePolicy($id = null) {
+
+        if($id == null) {
+            return "please pass parameter id in the request";
+        }
+        $policies = new Policies;
+        $results = $policies::find($id);
+        // echo $results;
+        // $results_json = json_encode($results);
+        if($results) {
+        $results_json = $results;
+        return response()
+                ->json($results_json)
+                ->header('Content-Type', 'application/json');
+        } else {
+            return response("policy id not found", 404);
+        }
+    }
     public function getAllLeaves($id) {
         if($id == null) {
             return "please pass parameter id in the request";
@@ -57,9 +75,10 @@ class PoliciesController extends Controller
         $policies = new Policies;
         $policies->name = $name;
         $policies->save();
-        return response()->json([
-            'name' => $policies->name
-        ]);
+        // return response()->json([
+        //     'name' => $policies->name
+        // ]);
+        return $policies->getOriginal();
     }
     public function deleteOne($id, Request $request) {
         if($id == null) {
