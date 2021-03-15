@@ -25,12 +25,12 @@ class LeavesController extends Controller
         $leaves = new Leaves;
         $data =  $request->validate([
             'name' => 'required',
-            'type' => 'required',
+            'payment_type' => 'required',
             'days' => 'required',
             'policy_id' => 'required'
         ]);
         $leaves->name = $data['name'];
-        $leaves->type= $data['type'];
+        $leaves->payment_type= $data['payment_type'];
         $leaves->days = $data['days'];
         $leaves->policy_id=$data['policy_id'];
         $leaves->save();
