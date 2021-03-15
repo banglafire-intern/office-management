@@ -6,7 +6,7 @@
                 <div v-if="showAddNewPolicy">
                     <form
                         class="d-flex justify-content-between"
-                        @submit.prevent="addNewPolicy"
+                        @submit.prevent="insertNewPolicy"
                     >
                         <input type="text" v-model="newPolicyName" />
                         <button type="submit">Save</button>
@@ -106,7 +106,7 @@ export default {
             this.allPolicies = data;
             console.log(this.allPolicies);
         },
-        async addNewPolicy() {
+        async insertNewPolicy() {
             const response = await axios.post(
                 "http://localhost:8000/api/policies",
                 {
