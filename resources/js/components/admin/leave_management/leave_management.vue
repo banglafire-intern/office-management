@@ -1,7 +1,9 @@
 <template>
   <div>
     <component v-bind:is="'navbar'"></component>
-    Leave
+    <div class="container mt-5">
+      
+    </div>
   </div>
 </template>
 

@@ -1,7 +1,7 @@
 <template>
   <div>
     <component v-bind:is="'navbar'"></component>
-    <div class="container">
+    <div class="container mt-5">
       <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item">
           <a
