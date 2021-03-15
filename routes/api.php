@@ -1,7 +1,9 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Route;
+use App\Policies;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,3 +19,53 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+
+Route::get("/user/early-bird", "UserHomeController@earlyBird");
+Route::get("/user/sticky-glue", "UserHomeController@stickyGlue");
+Route::get("/user/missed-by-inch", "UserHomeController@missedByAnInch");
+
+Route::get("/user-policies", "UserPolicyController@getAllUserPolicies");
+Route::put("/user-policies/{user_id?}", "UserPolicyController@updateOneUserPolicy");
+
+Route::get("/policies","PoliciesController@getAll");
+Route::get("/policies/{id}", "PoliciesController@getAllLeaves");
+Route::get("/policies/name/{id?}", "PoliciesController@getOnePolicy");
+Route::post("/policies", "PoliciesController@createOne");
+Route::put("/policies/{id}", "PoliciesController@updateOne");
+Route::delete("/policies/{id}", "PoliciesController@deleteOne");
+
+Route::get("/leaves/{id}", "LeavesController@findOne");
+Route::post("/leaves", "LeavesController@createOne");
+Route::put("/leaves/{id}", "LeavesController@updateOne");
+Route::delete("/leaves/{id}", "LeavesController@deleteOne");
+
+//TODO:
+// attendence sheet should contain a save button for each user component 
+// so that only one user attendance update shouldn't require updateing all the rows of 
+// the databse
+// Route::get("/attendances/{year}/{month}/{day}/{user_id}") -> get one user information 
+// Route::post("/attendances/{year}/{month}/{day}/{user_id}") -> post one user information 
+// Route::put("/attendances/{year}/{month}/{day}/{user_id}") -> update one user information 
+Route::get("/attendances", "AttendancesController@index");
+Route::get("/search-attendances/{date}", "AttendancesController@searchAttendance");
+Route::post("/change-mac", "AttendancesController@updateMacAddress");
+Route::post("/attendances", "AttendancesController@createOne");
+Route::put("/attendances", "AttendancesController@updateOne");
+// Route::get("/attendances/${date}/${user_id}", "");
+
+Route::get("/reasons", "ReasonController@getAll");
+Route::post("/reasons", "ReasonController@createOne");
+Route::put("/reasons/{id?}", "ReasonController@updateOne");
+Route::delete("/reasons/{id?}", "ReasonController@deleteOne");
+
+Route::get("/remainings/{user_id?}/{leave_id?}", "RemainingsController@getOne");
+Route::post("/remainings/{user_id?}/{leave_id?}", "RemainingsController@createOne");
+Route::put("/remainings/{user_id?}/{leave_id?}", "RemainingsController@updateOne");
+// Route::posts("/remainings/{id}", "");
+// Route::put("/remainings/{id}", "");
+
+Route::post("/leave-requests", "LeaveRequestController@createOne");
+Route::get("/leave-requests", "LeaveRequestController@fetchAll");
+Route::get("/leave-requests/{user_id?}", "LeaveRequestController@fetchForOneUser");
+Route::put("/leave-requests/{request_id?}", "LeaveRequestController@editOneRequest");

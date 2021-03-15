@@ -1,23 +1,27 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
-@section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
+<head>
 
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
+  <title>X Office</title>
+  <link rel="icon" href="{{ asset('images/logos/logo-with-black-bg.svg') }}" type="image/icon type">
 
-                    {{ __('You are logged in!') }}
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-@endsection
+  <meta name="role" content="{{$role}}">
+  <!-- Styles -->
+  <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
+</head>
+
+<body>
+  
+  <div id="app">
+    <keep-alive>
+      <router-view></router-view>
+    </keep-alive>
+  </div>
+  
+  <!-- Scripts -->
+  <script src="{{ asset('js/app.js')}}"></script>
+  
+</body>
+</html>
