@@ -1,16 +1,14 @@
 <template>
-  <div>
-    <component v-bind:is="'navbar'"></component>
-    Leave
-  </div>
+    <div>
+        <component v-bind:is="'navbar'"></component>
+        <div>
+            <h2>Leaves</h2>
+        </div>
+    </div>
 </template>
 
 <script>
-export default {
-
-}
+export default {};
 </script>
 
-<style>
-
-</style>
+<style></style>
