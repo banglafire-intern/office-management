@@ -2,90 +2,68 @@
   <div>
     <component v-bind:is="'navbar'"></component>
     <div class="container mt-5">
-      <div class="d-flex justify-content-evenly">
-        <div class="bg-info fifty">
-          <div v-if="showAddNewPolicy">
-            <form
-              class="d-flex justify-content-between"
-              @submit.prevent="insertNewPolicy"
-            >
-              <input type="text" v-model="newPolicyName" />
-              <button type="submit">Save</button>
-            </form>
-          </div>
-          <div class="d-flex justify-content-between">
-            <div>Policies</div>
-            <div>
-              <button @click="addNewPolicy">Add new</button>
+      <div class="row">
+        <div class="col-6">
+          <div class="d-flex justify-content-between mb-3">
+            <h4>Policies</h4>
+            <div v-if="!showAddNewPolicy">
+              <button class="btn btn-primary" @click="addNewPolicy">
+                Add new
+              </button>
+            </div>
+            <div v-else>
+              <form
+                class="d-flex justify-content-between"
+                @submit.prevent="insertNewPolicy"
+              >
+                <input type="text" v-model="newPolicyName" />
+                <button class="btn btn-primary" type="submit">Save</button>
+              </form>
             </div>
           </div>
           <div v-for="(policy, i) in allPolicies" :key="i">
-            <form class="d-flex justify-content-between">
-              <button @click.prevent="renderLeaves(policy)">
-                {{ policy.name }}
-              </button>
-              <div>
-                <button>Edit</button>
-              </div>
-            </form>
-          </div>
-        </div>
-
-        <div class="bg-danger fifty">
-          <div v-if="showAddNewLeave">
-            <form
-              class="d-flex justify-content-between"
-              @submit.prevent="insertNewLeave"
+            <div
+              class="bg-info p-2 my-2"
+              style="cursor: pointer"
+              @click="renderLeaves(policy)"
             >
-              <label for="name">Name</label>
-              <input id="name" type="text" v-model="newLeaveName" />
-              <label for="payment_type">payment_type</label>
-              <input
-                id="payment_type"
-                type="text"
-                v-model="newLeavePaymentType"
-              />
-              <label for="days">days</label>
-              <input id="days" type="text" v-model="newLeaveDays" />
-              <button type="submit">Save</button>
-            </form>
-          </div>
-
-          <div class="d-flex justify-content-between">
-            <div>Leaves: {{ policy.name ? policy.name : "" }}</div>
-            <div>
-              <button @click.prevent="addNewLeave">Add new</button>
+              {{ policy.name }}
             </div>
           </div>
-          <div v-for="(leave, i) in allLeaves" :key="i">
-            <form class="d-flex justify-content-between">
-              <div>
-                {{ leave }}
-              </div>
-              <div>
-                <button>Edit</button>
-              </div>
-            </form>
-          </div>
         </div>
+
+        <div class="col-6">
+          <leaves v-if="selected_policy" :policy="selected_policy" />
+        </div>
+      </div>
+      <div class="mt-5">
+        <h3 class="text-center">Assign Policy</h3>
+        <assign-policy />
+      </div>
+      <div class="mt-5">
+        <h3 class="text-center">Leave Request</h3>
+        <leave-request />
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import leaves from "./leaves";
+import assignPolicy from "./assign_policy";
+import leaveRequest from "./leave_request";
 export default {
+  components: {
+    leaves,
+    assignPolicy,
+    leaveRequest,
+  },
   data() {
     return {
       allPolicies: [],
-      allLeaves: [],
-      policy: {},
+      selected_policy: null,
       showAddNewPolicy: false,
-      showAddNewLeave: false,
       newPolicyName: "",
-      newLeaveName: "",
-      newLeavePaymentType: "",
-      newLeaveDays: "",
     };
   },
   async mounted() {
@@ -95,9 +73,7 @@ export default {
   },
   methods: {
     async renderLeaves(policy) {
-      this.policy = policy;
-      console.log(policy);
-      // const response = await axios.post("");
+      this.selected_policy = policy;
     },
     async getAllPolicies() {
       const response = await axios.get("/api/policies");
@@ -106,92 +82,19 @@ export default {
       this.allPolicies = data;
       console.log(this.allPolicies);
     },
-    async addNewPolicy() {
-      console.log("Policy called");
+    async insertNewPolicy() {
       const response = await axios.post("/api/policies", {
         name: this.newPolicyName,
       });
       console.log(response.data);
-    },
-    async insertNewLeave() {
-      if (!this.policy) {
-        alart("please select policy type");
-        return;
-      }
-      console.log(this.policy.policy_id);
-      console.log(this.newLeaveName);
-      console.log(this.newLeavePaymentType);
-      console.log(this.newLeaveDays);
-      const response = await axios.post("/api/leaves", {
-        name: this.newLeaveName,
-        payment_type: this.newLeavePaymentType,
-        days: this.newLeaveDays,
-        policy_id: this.policy.policy_id,
-      });
-      console.log(response.data);
-    },
-    addNewLeave() {
-      this.showAddNewLeave = !this.showAddNewLeave;
-      console.log(this.showAddNewleave);
+      this.showAddNewPolicy = !this.showAddNewPolicy;
     },
     addNewPolicy() {
       this.showAddNewPolicy = !this.showAddNewPolicy;
     },
   },
-    async mounted() {
-        const response = await axios.get("/api/policies");
-        console.log(response.data);
-        this.allPolicies = response.data;
-    },
-    methods: {
-        async renderLeaves(policy) {
-            this.policy = policy;
-            console.log(policy);
-            // const response = await axios.post("");
-        },
-        async getAllPolicies() {
-            const response = await axios.get("/api/policies");
-            const data = response.data;
-            console.log(data);
-            this.allPolicies = data;
-            console.log(this.allPolicies);
-        },
-        async insertNewPolicy() {
-            const response = await axios.post("/api/policies", {
-                name: this.newPolicyName
-            });
-            console.log(response.data);
-        },
-        async insertNewLeave() {
-            if (!this.policy) {
-                alart("please select policy type");
-                return;
-            }
-            console.log(this.policy.policy_id);
-            console.log(this.newLeaveName);
-            console.log(this.newLeavePaymentType);
-            console.log(this.newLeaveDays);
-            const response = await axios.post("/api/leaves", {
-                name: this.newLeaveName,
-                payment_type: this.newLeavePaymentType,
-                days: this.newLeaveDays,
-                policy_id: this.policy.policy_id
-            });
-            console.log(response.data);
-        },
-        addNewLeave() {
-            this.showAddNewLeave = !this.showAddNewLeave;
-            console.log(this.showAddNewleave);
-        },
-        addNewPolicy() {
-            this.showAddNewPolicy = !this.showAddNewPolicy;
-        }
-    }
 };
 </script>
 
 <style>
-.fifty {
-  width: 50%;
-}
 </style>
