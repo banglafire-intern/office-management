@@ -21,6 +21,14 @@ docker-compose up
 
 -   `php artisan migrate`
 
+## Run fresh migration
+
+-   `php artisan migrate:fresh`
+
+## Run seeder
+
+-   `php artisan db:seed`
+
 ## Create Models
 
 -   `php artisan make:model Policies`

@@ -17,8 +17,7 @@ class AttendancesController extends Controller
                 "data.*.date" => "required",
                 "data.*.status" => "required",
                 "data.*.start_time" => "required",
-                "data.*.end_time" => "required",
-                "data.*.reason_id" => "present",
+                "data.*.end_time" => "required"
             ]);
             // DB transaction to save all data in database
             // if any one entry fails all data will be rolled back
@@ -30,7 +29,6 @@ class AttendancesController extends Controller
                     $attendances->status=$row['status'];
                     $attendances->start_time=$row['start_time'];
                     $attendances->end_time=$row['end_time'];
-                    $attendances->reason_id = $row['reason_id'];
                     $attendances->save();
                 }
             });
@@ -44,7 +42,6 @@ class AttendancesController extends Controller
                 "data.*.status" => "required",
                 "data.*.start_time" => "required",
                 "data.*.end_time" => "required",
-                "data.*.reason_id" => "present",
             ]);
             // DB transaction to save all data in database
             // if any one entry fails all data will be rolled back
@@ -57,7 +54,6 @@ class AttendancesController extends Controller
                     $attendance->status=$row['status'];
                     $attendance->start_time=$row['start_time'];
                     $attendance->end_time=$row['end_time'];
-                    $attendance->reason_id = $row['reason_id'];
                     $attendance->save();
                 }
             });

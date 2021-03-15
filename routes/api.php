@@ -20,8 +20,17 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+
+Route::get("/user/early-bird", "UserHomeController@earlyBird");
+Route::get("/user/sticky-glue", "UserHomeController@stickyGlue");
+Route::get("/user/missed-by-inch", "UserHomeController@missedByAnInch");
+
+Route::get("/user-policies", "UserPolicyController@getAllUserPolicies");
+Route::put("/user-policies/{user_id?}", "UserPolicyController@updateOneUserPolicy");
+
 Route::get("/policies","PoliciesController@getAll");
 Route::get("/policies/{id}", "PoliciesController@getAllLeaves");
+Route::get("/policies/name/{id?}", "PoliciesController@getOnePolicy");
 Route::post("/policies", "PoliciesController@createOne");
 Route::put("/policies/{id}", "PoliciesController@updateOne");
 Route::delete("/policies/{id}", "PoliciesController@deleteOne");
@@ -49,7 +58,6 @@ Route::get("/reasons", "ReasonController@getAll");
 Route::post("/reasons", "ReasonController@createOne");
 Route::put("/reasons/{id?}", "ReasonController@updateOne");
 Route::delete("/reasons/{id?}", "ReasonController@deleteOne");
-
 
 Route::get("/remainings/{user_id?}/{leave_id?}", "RemainingsController@getOne");
 Route::post("/remainings/{user_id?}/{leave_id?}", "RemainingsController@createOne");
