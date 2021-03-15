@@ -7,7 +7,7 @@
           <div v-if="showAddNewPolicy">
             <form
               class="d-flex justify-content-between"
-              @submit.prevent="addNewPolicy"
+              @submit.prevent="insertNewPolicy"
             >
               <input type="text" v-model="newPolicyName" />
               <button type="submit">Save</button>
@@ -138,6 +138,55 @@ export default {
       this.showAddNewPolicy = !this.showAddNewPolicy;
     },
   },
+    async mounted() {
+        const response = await axios.get("/api/policies");
+        console.log(response.data);
+        this.allPolicies = response.data;
+    },
+    methods: {
+        async renderLeaves(policy) {
+            this.policy = policy;
+            console.log(policy);
+            // const response = await axios.post("");
+        },
+        async getAllPolicies() {
+            const response = await axios.get("/api/policies");
+            const data = response.data;
+            console.log(data);
+            this.allPolicies = data;
+            console.log(this.allPolicies);
+        },
+        async insertNewPolicy() {
+            const response = await axios.post("/api/policies", {
+                name: this.newPolicyName
+            });
+            console.log(response.data);
+        },
+        async insertNewLeave() {
+            if (!this.policy) {
+                alart("please select policy type");
+                return;
+            }
+            console.log(this.policy.policy_id);
+            console.log(this.newLeaveName);
+            console.log(this.newLeavePaymentType);
+            console.log(this.newLeaveDays);
+            const response = await axios.post("/api/leaves", {
+                name: this.newLeaveName,
+                payment_type: this.newLeavePaymentType,
+                days: this.newLeaveDays,
+                policy_id: this.policy.policy_id
+            });
+            console.log(response.data);
+        },
+        addNewLeave() {
+            this.showAddNewLeave = !this.showAddNewLeave;
+            console.log(this.showAddNewleave);
+        },
+        addNewPolicy() {
+            this.showAddNewPolicy = !this.showAddNewPolicy;
+        }
+    }
 };
 </script>
 
