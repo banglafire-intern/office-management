@@ -39,6 +39,7 @@ Route::delete("/leaves/{id}", "LeavesController@deleteOne");
 // Route::post("/attendances/{year}/{month}/{day}/{user_id}") -> post one user information 
 // Route::put("/attendances/{year}/{month}/{day}/{user_id}") -> update one user information 
 Route::get("/attendances", "AttendancesController@index");
+Route::get("/search-attendances/{date}", "AttendancesController@searchAttendance");
 Route::post("/change-mac", "AttendancesController@updateMacAddress");
 Route::post("/attendances", "AttendancesController@createOne");
 Route::put("/attendances", "AttendancesController@updateOne");
