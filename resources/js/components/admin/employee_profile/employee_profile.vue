@@ -1,73 +1,34 @@
 <template>
-    <div class="container p-3">
-        <div class="row justify-content-lg-center">
-            <div class="col col-xs-1">Username</div>
-            <div class="col-xxl-auto">
-                <div v-if="toggle">
-                    <select
-                        name="LeaveType"
-                        @change="onChange($event)"
-                        class="form-control form-control-md"
-                        v-model="key"
-                    >
-                        <!-- <button
-              class="btn btn-secondary dropdown-toggle"
-              type="button"
-              id="dropdownMenuButton"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              Policies
-            </button> -->
-                        <!-- <div class="dropdown-menu" aria-labelledby="dropdownMenuButton"> -->
-                        <option value="">Select Policies</option>
-                        <option class="dropdown-item" value="1st Year"
-                            >1st year</option
-                        >
-                        <option class="dropdown-item" value="2"
-                            >2nd year</option
-                        >
-                        <!-- <option class="dropdown-item">Junior Developer</option>
-              <option class="dropdown-item">Senior Developer</option> -->
-                        <!-- </div> -->
-                        <!-- </select>
-            <option value="1">Annual Leave/ Off-Day</option>
-            <option value="2">On Demand Leave</option>
-             -->
-                    </select>
-                </div>
-                <div v-else>
-                    <p>Policy</p>
-                </div>
-            </div>
-
-            <div class="col col-xs-1">
-                <div v-if="toggle">
-                    <button
-                        v-on:click="handleSubmit"
-                        type="button"
-                        class="btn btn-outline-dark btn-sm rounded mx-3"
-                    >
-                        Save
-                    </button>
-                    <button
-                        v-on:click="toggle = !toggle"
-                        type="button"
-                        class="btn btn-outline-dark btn-sm rounded mx-3"
-                    >
-                        Cancel
-                    </button>
-                </div>
-                <div v-else>
-                    <button
-                        v-on:click="toggle = !toggle"
-                        type="button"
-                        class="btn btn-outline-dark btn-sm rounded mx-3"
-                    >
-                        Edit
-                    </button>
-                </div>
+    <div>
+        <component v-bind:is="'navbar'"></component>
+        <div class="container mt-5">
+            <h4>Employee list</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Designation</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Joining Date</th>
+                        <th scope="col">Salary</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(user, i) in user_list" :key="i">
+                        <th scope="row">{{ i + 1 }}</th>
+                        <td>{{ user.name }}</td>
+                        <td>{{ user.designation }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.joining_date }}</td>
+                        <td>{{ user.salary }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div v-if="is_more" class="text-center">
+                <button class="btn btn-primary" @click="loadMoreUser">
+                    Load More
+                </button>
             </div>
         </div>
     </div>
@@ -76,32 +37,41 @@
 <script>
 import { createPopper } from "@popperjs/core";
 export default {
-    name: "AssignedPolicy",
-    props: {},
     data() {
         return {
-            toggle: false
+            user_list: [],
+            page_no: 1,
+            loading: false,
+            is_more: true
         };
     },
-    components: {},
     mounted() {
-        const button = document.querySelector("#drop");
-        // const tooltip = document.querySelector('#tooltip');
-        createPopper(button);
+        this.getUserData();
     },
     methods: {
-        toggleAdd() {
-            this.showAdd = !this.showAdd;
+        getUserData() {
+            if (this.loading) return;
+            let url = "/api/attendances?per_page=10&page=" + this.page_no;
+            this.loading = true;
+            axios
+                .get(url)
+                .then(res => {
+                    console.log(res);
+                    this.user_list = [...this.user_list, ...res.data.data];
+                    if (res.data.data.length < 10) this.is_more = false;
+                    this.page_no++;
+                    this.loading = false;
+                })
+                .catch(err => {
+                    this.loading = false;
+                    console.log(err);
+                });
         },
-        onChange(event) {
-            console.log(event.target.value);
-        },
-        handleSubmit: function() {
-            // console.log(this.$refs.item.value)
-            this.toggle = !this.toggle;
-            this.title = this.$refs.item.value;
+        loadMoreUser() {
+            this.getUserData();
         }
     }
 };
 </script>
-<style scoped></style>
+
+<style></style>

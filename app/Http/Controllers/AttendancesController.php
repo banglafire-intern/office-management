@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Attendances;
 use App\User;
+use App\Http\Resources\AttendanceResource;
 use Illuminate\Support\Facades\Validator;
 
 class AttendancesController extends Controller
@@ -99,6 +100,15 @@ class AttendancesController extends Controller
         $user->save();
 
         return response()->json("Success!", 201);
+      } catch (\Exception $th) {
+        return response()->json("Error!", 404);
+      }
+    }
+
+    public function searchAttendance(Request $request,$date) {
+      try{
+        $data = Attendances::where('date',$date)->get();
+        return AttendanceResource::collection($data);
       } catch (\Exception $th) {
         return response()->json("Error!", 404);
       }
