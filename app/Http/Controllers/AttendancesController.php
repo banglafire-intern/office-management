@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Attendances;
+use App\User;
+use Illuminate\Support\Facades\Validator;
 
 class AttendancesController extends Controller
 {
@@ -55,5 +57,50 @@ class AttendancesController extends Controller
                 }
             });
             return response('attendance updated successfully', 200);
+    }
+
+
+    public function index(Request $request) {
+      try{
+        $per_page = env("PER_PAGE_VIEW_API",5);
+        $validator = Validator::make($request->all(), [
+            'per_page' => 'integer',
+            'page' => 'integer',
+        ]);
+        if ($validator->fails()) {
+          return response()->json($validator->errors(), 422);
+        }
+        if ($request->has('per_page')) {
+          $per_page = $request->per_page;
+        }
+        
+        $data = User::where('role','employee')->paginate($per_page);
+
+        return response()->json($data, 200);
+
+      } catch (\Exception $th) {
+        return response()->json("Error!", 404);
+      }
+    }
+
+    public function updateMacAddress(Request $request) {
+      try{
+        $validator = Validator::make($request->all(), [
+          'id' => 'integer|required',
+          'mac' => 'string|required',
+        ]);
+        if ($validator->fails()) {
+          return response()->json($validator->errors(), 422);
+        }
+
+        $user = User::findOrFail($request->id);
+
+        $user->mac_address = $request->mac;
+        $user->save();
+
+        return response()->json("Success!", 201);
+      } catch (\Exception $th) {
+        return response()->json("Error!", 404);
+      }
     }
 }
